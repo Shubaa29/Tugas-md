@@ -1,75 +1,100 @@
-import streamlit as st
 import pandas as pd
-import numpy as np
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 
+class Preprocessing:
+    def __init__(self, data):
+        self.data = data
+
+    def encode_categorical_features(self):
+        # Encode categorical features
+        categorical_columns = self.data.select_dtypes(include=['object']).columns
+        label_encoder = LabelEncoder()
+        for col in categorical_columns:
+            self.data[col] = label_encoder.fit_transform(self.data[col])
+        return self.data
+
+    def normalize_numerical_features(self):
+        # Normalize numerical features
+        numerical_columns = self.data.select_dtypes(include=['float64', 'int64']).columns
+        scaler = StandardScaler()
+        self.data[numerical_columns] = scaler.fit_transform(self.data[numerical_columns])
+        return self.data
+
+    def preprocess_data(self):
+        self.encode_categorical_features()
+        self.normalize_numerical_features()
+        return self.data
+
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
 class ObesityModel:
-    def __init__(self, data_path):
-        self.data = pd.read_csv(data_path)
-        self.label_encoders = {}
-        self.scaler = StandardScaler()
-        self.model = RandomForestClassifier(n_estimators=100, random_state=42)
-    
-    def preprocess_data(self):
-        # Encoding categorical variables
-        for col in self.data.select_dtypes(include=['object']).columns:
-            le = LabelEncoder()
-            self.data[col] = le.fit_transform(self.data[col])
-            self.label_encoders[col] = le
-        
-        # Splitting features and target
-        X = self.data.drop(columns=['NObeyesdad'])  # Target column
+    def __init__(self, data):
+        self.data = data
+        self.model = RandomForestClassifier()
+
+    def split_data(self):
+        X = self.data.drop('NObeyesdad', axis=1)
         y = self.data['NObeyesdad']
-        
-        # Normalization
-        X_scaled = self.scaler.fit_transform(X)
-        
-        return train_test_split(X_scaled, y, test_size=0.2, random_state=42)
-    
-    def train(self):
-        X_train, X_test, y_train, y_test = self.preprocess_data()
-        self.model.fit(X_train, y_train)
-        predictions = self.model.predict(X_test)
-        acc = accuracy_score(y_test, predictions)
-        return acc, classification_report(y_test, predictions)
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    def predict(self, input_data):
-        input_data_scaled = self.scaler.transform([input_data])
-        prediction = self.model.predict(input_data_scaled)[0]
-        probabilities = self.model.predict_proba(input_data_scaled)[0]
-        return prediction, probabilities
+    def train_model(self):
+        self.model.fit(self.X_train, self.y_train)
 
-# Streamlit App
-st.title("Obesity Classification with Random Forest")
-model = ObesityModel('ObesityDataSet_raw_and_data_sinthetic.csv')
-acc, report = model.train()
+    def evaluate_model(self):
+        y_pred = self.model.predict(self.X_test)
+        accuracy = accuracy_score(self.y_test, y_pred)
+        return accuracy
 
-st.write(f"### Model Accuracy: {acc}")
-st.text(report)
+import pandas as pd
+from obesity_prediction.preprocessing import Preprocessing
+from obesity_prediction.model import ObesityModel
 
-st.write("### Raw Data")
-st.dataframe(model.data.head())
+def main():
+    # Load data
+    data = pd.read_csv('data/ObesityDataSet_raw_and_data_sinthetic.csv')
 
-st.write("### Input User Data")
-input_data = []
+    # Preprocess data
+    preprocessor = Preprocessing(data)
+    processed_data = preprocessor.preprocess_data()
 
-# Numerical Inputs
-for col in model.data.select_dtypes(include=['float64', 'int64']).columns:
-    value = st.slider(f"{col}", float(model.data[col].min()), float(model.data[col].max()), float(model.data[col].mean()))
-    input_data.append(value)
+    # Train model
+    obesity_model = ObesityModel(processed_data)
+    obesity_model.split_data()
+    obesity_model.train_model()
+    accuracy = obesity_model.evaluate_model()
 
-# Categorical Inputs
-for col in model.data.select_dtypes(include=['object']).columns:
-    options = list(model.label_encoders[col].classes_)
-    value = st.selectbox(f"{col}", options)
-    input_data.append(model.label_encoders[col].transform([value])[0])
+    print(f"Model Accuracy: {accuracy:.2f}")
 
-# Show input data
-st.write("### Input Data Preview")
-st.write(input_data)
+if __name__ == "__main__":
+    main()
 
-# Prediction
-if st.button("Predict"):
-    prediction, probabilities = model.predict(input_data)
-    st.write(f"### Predicted Class: {prediction}")
-    st.write(f"### Probability per Class: {probabilities}")
+
+import streamlit as st
+import pandas as pd
+from obesity_prediction.preprocessing import Preprocessing
+from obesity_prediction.model import ObesityModel
+
+def main():
+    st.title("Obesity Prediction App")
+
+    # Load data
+    data = pd.read_csv('data/ObesityDataSet_raw_and_data_sinthetic.csv')
+
+    # Preprocess data
+    preprocessor = Preprocessing(data)
+    processed_data = preprocessor.preprocess_data()
+
+    # Train model
+    obesity_model = ObesityModel(processed_data)
+    obesity_model.split_data()
+    obesity_model.train_model()
+
+    # Display accuracy
+    accuracy = obesity_model.evaluate_model()
+    st.write(f"Model Accuracy: {accuracy:.2f}")
+
+if __name__ == "__main__":
+    main()
