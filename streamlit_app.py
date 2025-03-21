@@ -1,10 +1,19 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
+
+def load_model(filename):
+  model = joblib.load(filename)
+  return model
+
+def predict_with_model(model, user_input):
+  prediction = model.predict([user_input])
+  return prediction[0]
 
 class ObesityModel:
     def __init__(self, data_path):
