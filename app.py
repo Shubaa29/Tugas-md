@@ -5,8 +5,14 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
-import matplotlib.pyplot as plt
-import seaborn as sns
+
+# Check if matplotlib is installed
+try:
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+except ImportError:
+    st.error("Matplotlib or Seaborn is not installed. Please install it using `pip install matplotlib seaborn`.")
+    st.stop()
 
 class ObesityPredictionApp:
     def __init__(self, data):
