@@ -53,8 +53,7 @@ class ObesityPredictionApp:
         if st.checkbox("Show Raw Data"):
             st.write(self.data)
 
-       import matplotlib.pyplot as plt
-import seaborn as sns
+
 
 # Set plot style
 plt.figure(figsize=(10, 6))
