@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+
 
 class Preprocessing:
     def __init__(self, data):
