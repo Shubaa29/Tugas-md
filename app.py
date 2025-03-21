@@ -54,7 +54,7 @@ class ObesityPredictionApp:
         return prediction, probabilities
 
     def run(self):
-        st.title("Obesity Level Prediction")
+        st.title("Machine Learning App")
         
         # Display raw data
         if st.checkbox("Show Raw Data"):
