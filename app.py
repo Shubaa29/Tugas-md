@@ -56,18 +56,18 @@ class ObesityPredictionApp:
 
 
 # Set plot style
-plt.figure(figsize=(10, 6))
-sns.scatterplot(data=df, x="Height", y="Weight", hue="NObeyesdad", palette="rainbow", alpha=0.7)
+    plt.figure(figsize=(10, 6))
+    sns.scatterplot(data=df, x="Height", y="Weight", hue="NObeyesdad", palette="rainbow", alpha=0.7)
 
 # Labels and title
-plt.xlabel("Height (m)")
-plt.ylabel("Weight (kg)")
-plt.title("Height vs. Weight by Obesity Level")
-plt.legend(title="Obesity Level", bbox_to_anchor=(1, 1))
-plt.grid(True)
+    plt.xlabel("Height (m)")
+    plt.ylabel("Weight (kg)")
+    plt.title("Height vs. Weight by Obesity Level")
+    plt.legend(title="Obesity Level", bbox_to_anchor=(1, 1))
+    plt.grid(True)
 
 # Show the plot
-plt.show()
+    plt.show()
 
 
         # Input data numerik
