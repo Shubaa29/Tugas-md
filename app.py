@@ -1,5 +1,11 @@
 import streamlit as st
 import pandas as pd
+import sys
+import os
+
+# Tambahkan path ke folder root
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from obesity_prediction.preprocessing import Preprocessing
 from obesity_prediction.model import ObesityModel
 
