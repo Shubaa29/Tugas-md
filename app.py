@@ -1,3 +1,4 @@
+ pip install matplotlib seaborn.
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -6,13 +7,7 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-# Check if matplotlib is installed
-try:
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-except ImportError:
-    st.error("Matplotlib or Seaborn is not installed. Please install it using `pip install matplotlib seaborn`.")
-    st.stop()
+
 
 class ObesityPredictionApp:
     def __init__(self, data):
