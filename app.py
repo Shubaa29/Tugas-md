@@ -28,5 +28,6 @@ def main():
     accuracy = obesity_model.evaluate_model()
     st.write(f"Model Accuracy: {accuracy:.2f}")
 
+
 if __name__ == "__main__":
     main()
