@@ -7,7 +7,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 
-
 class ObesityPredictionApp:
     def __init__(self, data):
         self.data = data
@@ -56,9 +55,9 @@ class ObesityPredictionApp:
         # Data Visualization
         if st.checkbox("Show Data Visualization"):
             st.write("### Correlation Heatmap")
-            plt.figure(figsize=(10, 8))
-            sns.heatmap(self.data.corr(), annot=True, cmap='coolwarm')
-            st.pyplot()
+            fig, ax = plt.subplots(figsize=(10, 8))  # Create a figure and axis
+            sns.heatmap(self.data.corr(), annot=True, cmap='coolwarm', ax=ax)  # Use the axis
+            st.pyplot(fig)  # Pass the figure to st.pyplot()
 
         # Input data numerik
         st.sidebar.header("Input Numerical Data")
