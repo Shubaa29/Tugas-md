@@ -6,15 +6,6 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-# Check if matplotlib and seaborn are installed
-try:
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-    st.write("Matplotlib and Seaborn are installed and working!")
-except ImportError as e:
-    st.error(f"Error importing matplotlib or seaborn: {e}")
-    st.stop()
-
 class ObesityPredictionApp:
     def __init__(self, data):
         self.data = data
