@@ -1,22 +1,28 @@
 import pandas as pd
-from obesity_prediction.preprocessing import Preprocessing
-from obesity_prediction.model import ObesityModel
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
 
-def main():
-    # Load data
-    data = pd.read_csv('data/ObesityDataSet_raw_and_data_sinthetic.csv')
+# Load data
+data = pd.read_csv('data/ObesityDataSet_raw_and_data_sinthetic.csv')
 
-    # Preprocess data
-    preprocessor = Preprocessing(data)
-    processed_data = preprocessor.preprocess_data()
+# Encode kolom target
+label_encoder = LabelEncoder()
+data['NObeyesdad'] = label_encoder.fit_transform(data['NObeyesdad'])
 
-    # Train model
-    obesity_model = ObesityModel(processed_data)
-    obesity_model.split_data()
-    obesity_model.train_model()
-    accuracy = obesity_model.evaluate_model()
+# Pisahkan fitur dan target
+X = data.drop('NObeyesdad', axis=1)
+y = data['NObeyesdad']
 
-    print(f"Model Accuracy: {accuracy:.2f}")
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-if __name__ == "__main__":
-    main()
+# Train model
+model = RandomForestClassifier()
+model.fit(X_train, y_train)
+
+# Evaluate model
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Model Accuracy: {accuracy:.2f}")
