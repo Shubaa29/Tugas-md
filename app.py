@@ -75,6 +75,21 @@ class ObesityPredictionApp:
             except Exception as e:
                 st.error(f"Error generating heatmap: {e}")
 
+            st.write("### Distribution of Numerical Features")
+            try:
+                numerical_cols = self.data.select_dtypes(include=['float64', 'int64']).columns
+                if len(numerical_cols) > 0:
+                    fig, ax = plt.subplots(figsize=(10, 6))
+                    for col in numerical_cols:
+                        sns.histplot(self.data[col], kde=True, ax=ax, label=col)
+                    ax.legend()
+                    ax.set_title("Distribution of Numerical Features")
+                    st.pyplot(fig)
+                else:
+                    st.warning("No numerical columns found for distribution plot.")
+            except Exception as e:
+                st.error(f"Error generating distribution plot: {e}")
+
         # Input data numerik
         st.sidebar.header("Input Numerical Data")
         numerical_inputs = {}
