@@ -5,9 +5,15 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
-import matplotlib
-matplotlib.use('Agg')  # Use a non-interactive backend
-import matplotlib.pyplot as plt
+
+# Check if matplotlib and seaborn are installed
+try:
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    st.write("Matplotlib and Seaborn are installed and working!")
+except ImportError as e:
+    st.error(f"Error importing matplotlib or seaborn: {e}")
+    st.stop()
 
 class ObesityPredictionApp:
     def __init__(self, data):
@@ -57,9 +63,17 @@ class ObesityPredictionApp:
         # Data Visualization
         if st.checkbox("Show Data Visualization"):
             st.write("### Correlation Heatmap")
-            fig, ax = plt.subplots(figsize=(10, 8))  # Create a figure and axis
-            sns.heatmap(self.data.corr(), annot=True, cmap='coolwarm', ax=ax)  # Use the axis
-            st.pyplot(fig)  # Pass the figure to st.pyplot()
+            try:
+                corr_matrix = self.data.corr()
+                st.write("Correlation Matrix:", corr_matrix)  # Debugging: Display the correlation matrix
+                if corr_matrix.isnull().any().any():
+                    st.error("Correlation matrix contains NaN values. Check your data.")
+                else:
+                    fig, ax = plt.subplots(figsize=(10, 8))
+                    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', ax=ax)
+                    st.pyplot(fig)
+            except Exception as e:
+                st.error(f"Error generating heatmap: {e}")
 
         # Input data numerik
         st.sidebar.header("Input Numerical Data")
