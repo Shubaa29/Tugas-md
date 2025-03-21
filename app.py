@@ -61,23 +61,19 @@ class ObesityPredictionApp:
             st.write(self.data)
 
         # Data Visualization
-        import matplotlib.pyplot as plt
-        import seaborn as sns
-
-# Set plot style
-        plt.figure(figsize=(10, 6))
-        sns.scatterplot(data=df, x="Height", y="Weight", hue="NObeyesdad", palette="rainbow", alpha=0.7)
-
-# Labels and title
-        plt.xlabel("Height (m)")
-        plt.ylabel("Weight (kg)")
-        plt.title("Height vs. Weight by Obesity Level")
-        plt.legend(title="Obesity Level", bbox_to_anchor=(1, 1))
-        plt.grid(True)
-
-# Show the plot
-        plt.show()
-
+        if st.checkbox("Show Data Visualization"):
+            st.write("### Correlation Heatmap")
+            try:
+                corr_matrix = self.data.corr()
+                st.write("Correlation Matrix:", corr_matrix)  # Debugging: Display the correlation matrix
+                if corr_matrix.isnull().any().any():
+                    st.error("Correlation matrix contains NaN values. Check your data.")
+                else:
+                    fig, ax = plt.subplots(figsize=(10, 8))
+                    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', ax=ax)
+                    st.pyplot(fig)
+            except Exception as e:
+                st.error(f"Error generating heatmap: {e}")
 
         # Input data numerik
         st.sidebar.header("Input Numerical Data")
