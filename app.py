@@ -1,12 +1,19 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+
+# Check if matplotlib and seaborn are installed
+try:
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    st.write("Matplotlib and Seaborn are installed and working!")
+except ImportError as e:
+    st.error(f"Error importing matplotlib or seaborn: {e}")
+    st.stop()
 
 class ObesityPredictionApp:
     def __init__(self, data):
@@ -53,21 +60,23 @@ class ObesityPredictionApp:
         if st.checkbox("Show Raw Data"):
             st.write(self.data)
 
-
+        # Data Visualization
+        import matplotlib.pyplot as plt
+        import seaborn as sns
 
 # Set plot style
-    plt.figure(figsize=(10, 6))
-    sns.scatterplot(data=df, x="Height", y="Weight", hue="NObeyesdad", palette="rainbow", alpha=0.7)
+        plt.figure(figsize=(10, 6))
+        sns.scatterplot(data=df, x="Height", y="Weight", hue="NObeyesdad", palette="rainbow", alpha=0.7)
 
 # Labels and title
-    plt.xlabel("Height (m)")
-    plt.ylabel("Weight (kg)")
-    plt.title("Height vs. Weight by Obesity Level")
-    plt.legend(title="Obesity Level", bbox_to_anchor=(1, 1))
-    plt.grid(True)
+        plt.xlabel("Height (m)")
+        plt.ylabel("Weight (kg)")
+        plt.title("Height vs. Weight by Obesity Level")
+        plt.legend(title="Obesity Level", bbox_to_anchor=(1, 1))
+        plt.grid(True)
 
 # Show the plot
-    plt.show()
+        plt.show()
 
 
         # Input data numerik
