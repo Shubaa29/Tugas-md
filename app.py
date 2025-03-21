@@ -13,7 +13,7 @@ def main():
     st.title("Obesity Prediction App")
 
     # Load data
-    data = pd.read_csv('data/ObesityDataSet_raw_and_data_sinthetic.csv')
+    data = pd.read_csv('ObesityDataSet_raw_and_data_sinthetic.csv')
 
     # Preprocess data
     preprocessor = Preprocessing(data)
