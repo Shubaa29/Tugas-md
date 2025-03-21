@@ -41,7 +41,7 @@ class ObesityModel:
 
 # Streamlit App
 st.title("Obesity Classification with Random Forest")
-model = ObesityModel('/mnt/data/ObesityDataSet_raw_and_data_sinthetic.csv')
+model = ObesityModel('ObesityDataSet_raw_and_data_sinthetic.csv')
 acc, report = model.train()
 
 st.write(f"### Model Accuracy: {acc}")
